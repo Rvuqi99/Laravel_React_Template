@@ -1,41 +1,24 @@
-import React, { useState } from "react";
 import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link } from "@inertiajs/react";
-import axios from "axios";
+import { Head, Link, useForm } from "@inertiajs/react";
 
-const Login = ({ status, canResetPassword }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [remember, setRemember] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [processing, setProcessing] = useState(false);
+export default function Login({ status, canResetPassword }) {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        email: "",
+        password: "",
+        remember: false,
+    });
 
-    const handleSubmit = async (e) => {
+    const submit = (e) => {
         e.preventDefault();
-        setProcessing(true);
-        setErrors({});
 
-        try {
-            await axios.post(route("login"), {
-                email,
-                password,
-                remember,
-            });
-            // Inertia automatically handles redirects after login
-        } catch (error) {
-            if (error.response && error.response.status === 422) {
-                setErrors(error.response.data.errors);
-            } else {
-                console.error(error);
-            }
-        } finally {
-            setProcessing(false);
-        }
+        post(route("login"), {
+            onFinish: () => reset("password"),
+        });
     };
 
     return (
@@ -48,45 +31,48 @@ const Login = ({ status, canResetPassword }) => {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit}>
-                {/* Email */}
+            <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
+
                     <TextInput
                         id="email"
                         type="email"
                         name="email"
-                        value={email}
+                        value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setData("email", e.target.value)}
                     />
+
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                {/* Password */}
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
+
                     <TextInput
                         id="password"
                         type="password"
                         name="password"
-                        value={password}
+                        value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => setData("password", e.target.value)}
                     />
+
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                {/* Remember Me */}
                 <div className="mt-4 block">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
-                            checked={remember}
-                            onChange={(e) => setRemember(e.target.checked)}
+                            checked={data.remember}
+                            onChange={(e) =>
+                                setData("remember", e.target.checked)
+                            }
                         />
                         <span className="ms-2 text-sm text-gray-600">
                             Remember me
@@ -94,7 +80,6 @@ const Login = ({ status, canResetPassword }) => {
                     </label>
                 </div>
 
-                {/* Submit + Forgot Password */}
                 <div className="mt-4 flex items-center justify-end">
                     {canResetPassword && (
                         <Link
@@ -104,13 +89,12 @@ const Login = ({ status, canResetPassword }) => {
                             Forgot your password?
                         </Link>
                     )}
+
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        {processing ? "Logging in..." : "Log in"}
+                        Log in
                     </PrimaryButton>
                 </div>
             </form>
         </GuestLayout>
     );
-};
-
-export default Login;
+}
