@@ -10,6 +10,7 @@ import {
 import tbs_logo from "@/Images/tbs_logo.png";
 import { ArrowForward, Visibility, VisibilityOff } from "@mui/icons-material";
 import React from "react";
+import { router } from "@inertiajs/react";
 
 const Register = () => {
     const [formData, setFormData] = React.useState({
@@ -33,12 +34,25 @@ const Register = () => {
         });
     };
 
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
 
-        post(route("register"), {
-            onFinish: () => reset("password", "password_confirmation"),
-        });
+        try {
+            await axios.post(route("register"), {
+                name: formData.name,
+                phone_number: formData.phone_number,
+                ic_number: formData.ic_number,
+                email: formData.email,
+                password: formData.password,
+                password_confirmation: formData.password_confirmation,
+            });
+
+            router.visit(route("dashboard"));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            updatedFormData({ password: "", password_confirmation: "" });
+        }
     };
 
     return (
@@ -235,7 +249,10 @@ const Register = () => {
                             },
                         }}
                     />
-                    <Button sx={[styles.login_button, { marginTop: "10px" }]}>
+                    <Button
+                        sx={[styles.login_button, { marginTop: "10px" }]}
+                        onClick={submit}
+                    >
                         <Typography
                             sx={{
                                 fontSize: 14,

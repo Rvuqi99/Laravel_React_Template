@@ -13,13 +13,14 @@ import tbs_logo from "@/Images/tbs_logo.png";
 import google_login from "@/Images/google_login.png";
 import apple_login from "@/Images/apple_login.png";
 import { ArrowForward, Visibility, VisibilityOff } from "@mui/icons-material";
+import { router } from "@inertiajs/react";
 
 const Login = ({ status, canResetPassword }) => {
     const [formData, setFormData] = useState({
-        email: "",
-        password: "",
+        email: "test1@test.com",
+        password: "qwerty123",
         showPassword: "",
-        remember: false,
+        remember: true,
     });
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
@@ -49,6 +50,7 @@ const Login = ({ status, canResetPassword }) => {
                 remember: formData.remember,
             });
             // Inertia automatically handles redirects after login
+            router.visit(route("dashboard"));
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 setErrors(error.response.data.errors);
@@ -203,7 +205,7 @@ const Login = ({ status, canResetPassword }) => {
                     >
                         Lupa Kata Laluan?
                     </Link>
-                    <Button sx={styles.login_button}>
+                    <Button sx={styles.login_button} onClick={handleSubmit}>
                         <Typography
                             sx={{
                                 fontSize: 14,

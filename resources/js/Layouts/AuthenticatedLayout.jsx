@@ -1,176 +1,251 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import {
+    AppBar,
+    Toolbar,
+    Box,
+    Typography,
+    IconButton,
+    Button,
+    TextField,
+    InputAdornment,
+    iconButtonClasses,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import React, { useState } from "react";
+import { usePage, Link } from "@inertiajs/react";
+import logo1 from "@/Images/logo1.png";
+import { styles } from "@/Components/Styles";
+import {
+    Calculate,
+    Home,
+    KeyboardArrowDown,
+    Notifications,
+    Payment,
+    PendingActions,
+    Search,
+    SupportAgent,
+} from "@mui/icons-material";
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
-
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showNav, setShowNav] = useState(false);
+    const [nav, setNav] = useState([
+        {
+            id: 1,
+            name: "Papan Pengguna",
+            icon: <Home sx={{ fontSize: "30px" }} />,
+            haveList: false,
+        },
+        {
+            id: 2,
+            name: "Bayaran",
+            icon: <Payment sx={{ fontSize: "30px" }} />,
+            haveList: true,
+        },
+        {
+            id: 3,
+            name: "Kalkulator Zakat",
+            icon: <Calculate sx={{ fontSize: "30px" }} />,
+            haveList: true,
+        },
+        {
+            id: 4,
+            name: "Bantuan",
+            icon: <PendingActions sx={{ fontSize: "30px" }} />,
+            haveList: true,
+        },
+        {
+            id: 5,
+            name: "Info",
+            icon: <Notifications sx={{ fontSize: "30px" }} />,
+            haveList: true,
+        },
+        {
+            id: 6,
+            name: "Hubungi Kami",
+            icon: <SupportAgent sx={{ fontSize: "30px" }} />,
+            haveList: false,
+        },
+    ]);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
+        <Box sx={{ minHeight: "100vh", backgroundColor: "#f3f4f6" }}>
+            <AppBar position="static" color="default" elevation={1}>
+                <Box
+                    sx={{
+                        backgroundColor: "white",
+                        padding: { md: "10px 150px", xs: "10px 20px" },
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: "20px",
+                        flexWrap: { xs: "wrap", md: "nowrap" },
+                    }}
                 >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
+                    <Box
+                        sx={{
+                            display: { md: "flex", xs: "none" },
+                            alignItems: "center",
+                            gap: "20px",
+                            flexShrink: 0,
+                        }}
+                    >
+                        <Box
+                            component="img"
+                            src={logo1}
+                            sx={{
+                                height: { md: "70px", xs: "50px" },
+                            }}
+                        />
+                        <Typography
+                            sx={{
+                                color: "black",
+                                fontWeight: "bold",
+                                fontSize: "22px",
+                            }}
                         >
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
+                            Tabung Baitulmal Sarawak
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "20px",
+                            width: { md: "auto", xs: "100%" },
+                            minWidth: "0px",
+                        }}
+                    >
+                        <TextField
+                            placeholder="Cari..."
+                            fullWidth
+                            // value={formData.password}
+                            // onChange={(e) =>
+                            //     updatedFormData({ password: e.target.value })
+                            // }
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment
+                                            position="start"
+                                            sx={{ mr: 1.5 }}
+                                        >
+                                            <Search
+                                                sx={{
+                                                    color: "#AAAAAA",
+                                                    fontSize: 20,
+                                                }}
+                                            />
+                                        </InputAdornment>
+                                    ),
+                                    style: {
+                                        fontSize: "14px",
+                                        color: "#AAAAAA",
+                                    },
+                                },
+                            }}
+                            sx={{
+                                width: { md: "300px", xs: "100%" },
+                                "& .MuiOutlinedInput-root": {
+                                    color: "black",
+                                    borderRadius: "10px",
+                                    height: "40px",
+                                    "& fieldset": { borderColor: "#AAAAAA" },
+                                },
+                                "& .MuiInputBase-input": {
+                                    color: "#000000", // actual input text color
+                                    fontSize: "14px",
+                                },
+                                "& .MuiInputBase-input::placeholder": {
+                                    color: "#AAAAAA",
+                                    opacity: 1, // ensures it’s not transparent
+                                },
+                            }}
+                        />
+                        <Button
+                            sx={{
+                                backgroundColor: "#007C3D",
+                                color: "white",
+                                textTransform: "none",
+                                padding: "5px",
+                                width: "150px",
+                                borderRadius: "20px",
+                            }}
+                        >
+                            <Typography
+                                sx={{ fontSize: "16px", fontWeight: "bold" }}
                             >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+                                Log masuk
+                            </Typography>
+                        </Button>
+                    </Box>
+                </Box>
+                <Toolbar
+                    sx={{
+                        padding: { md: "10px 150px", xs: "10px 20px" },
+                        backgroundColor: "#007C3D",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: { md: "flex", sm: "grid", xs: "none" },
+                            gap: "20px",
+                        }}
+                    >
+                        {nav.map((item) => (
+                            <Button
+                                key={item.id}
+                                sx={{
+                                    color: "white",
+                                    textTransform: "none",
+                                    fontWeight: 700,
+                                    gap: "10px",
+                                    fontSize: "16px",
+                                }}
+                                href={route("dashboard")}
+                            >
+                                {item.icon}
+                                {item.name}
+                                {item.haveList && <KeyboardArrowDown />}
+                            </Button>
+                        ))}
+                    </Box>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
+                    <IconButton
+                        edge="end"
+                        color="inherit"
+                        sx={{ display: { sm: "none" } }}
+                        onClick={() => setShowNav((prev) => !prev)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+
+            {showNav && (
+                <Box
+                    sx={{
+                        display: { sm: "none" },
+                        backgroundColor: "#fff",
+                        p: 2,
+                    }}
+                >
+                    <Button fullWidth href={route("dashboard")}>
+                        Dashboard
+                    </Button>
+                    <Button fullWidth href={route("logout")} color="error">
+                        Log Out
+                    </Button>
+                </Box>
             )}
 
-            <main>{children}</main>
-        </div>
+            {header && (
+                <Box sx={{ backgroundColor: "#fff", boxShadow: 1, p: 3 }}>
+                    {header}
+                </Box>
+            )}
+
+            <Box component="main">{children}</Box>
+        </Box>
     );
 }
