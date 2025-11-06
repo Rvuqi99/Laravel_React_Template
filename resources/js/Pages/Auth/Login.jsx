@@ -244,7 +244,7 @@ const Login = ({ status, canResetPassword }) => {
                                 fontSize: "14px",
                                 fontWeight: 700,
                             }}
-                            href=""
+                            href={route("register")}
                         >
                             Daftar
                         </Link>{" "}

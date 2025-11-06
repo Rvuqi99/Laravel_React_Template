@@ -1,120 +1,291 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { styles } from "@/Components/Styles";
+import {
+    Box,
+    Button,
+    IconButton,
+    Link,
+    TextField,
+    Typography,
+} from "@mui/material";
+import tbs_logo from "@/Images/tbs_logo.png";
+import { ArrowForward, Visibility, VisibilityOff } from "@mui/icons-material";
+import React from "react";
 
-export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+const Register = () => {
+    const [formData, setFormData] = React.useState({
+        name: "",
+        phone_number: "",
+        ic_number: "",
+        password: "",
+        showPassword: false,
+        password_confirmation: "",
+        showConfirm: false,
+        email: "",
     });
+
+    // Function for updating formData value
+    const updatedFormData = (data) => {
+        setFormData((prev) => {
+            return {
+                ...prev,
+                ...data,
+            };
+        });
+    };
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+        post(route("register"), {
+            onFinish: () => reset("password", "password_confirmation"),
         });
     };
 
     return (
-        <GuestLayout>
-            <Head title="Register" />
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
+        <Box sx={styles.login_wrapper}>
+            <Box sx={styles.login_container1}>
+                <Box sx={{ margin: "40px" }}>
+                    <Box
+                        component="img"
+                        src={tbs_logo}
+                        sx={styles.login_tbs_logo}
                     />
-
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                </Box>
+            </Box>
+            <Box sx={styles.login_container2}>
+                <Box sx={styles.login_input_container}>
+                    <Typography
+                        sx={{
+                            fontSize: "24px",
+                            fontWeight: "500",
+                            color: "black",
+                        }}
                     >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+                        Daftar
+                    </Typography>
+                    <TextField
+                        placeholder={"Nama Penuh (mengikut kad pengenalan)"}
+                        type="text"
+                        value={formData.name}
+                        fullWidth
+                        onChange={(e) =>
+                            updatedFormData({ name: e.target.value })
+                        }
+                        slotProps={{
+                            input: {
+                                style: { fontSize: "14px" },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "10px",
+                                padding: "5px",
+                                "& fieldset": {
+                                    borderColor: "#D9D9D9",
+                                },
+                            },
+                        }}
+                    />
+                    <TextField
+                        placeholder={"Nombor Telefon"}
+                        type="text"
+                        value={formData.phone_number}
+                        fullWidth
+                        onChange={(e) =>
+                            updatedFormData({ phone_number: e.target.value })
+                        }
+                        slotProps={{
+                            input: {
+                                style: { fontSize: "14px" },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "10px",
+                                padding: "5px",
+                                "& fieldset": {
+                                    borderColor: "#D9D9D9",
+                                },
+                            },
+                        }}
+                    />
+                    <TextField
+                        placeholder={"Nombor Kad Pengenalan"}
+                        type="text"
+                        value={formData.ic_number}
+                        fullWidth
+                        onChange={(e) =>
+                            updatedFormData({ ic_number: e.target.value })
+                        }
+                        slotProps={{
+                            input: {
+                                style: { fontSize: "14px" },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "10px",
+                                padding: "5px",
+                                "& fieldset": {
+                                    borderColor: "#D9D9D9",
+                                },
+                            },
+                        }}
+                    />
+                    <TextField
+                        placeholder={"E-mel"}
+                        type="text"
+                        value={formData.email}
+                        fullWidth
+                        onChange={(e) =>
+                            updatedFormData({ email: e.target.value })
+                        }
+                        slotProps={{
+                            input: {
+                                style: { fontSize: "14px" },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "10px",
+                                padding: "5px",
+                                "& fieldset": {
+                                    borderColor: "#D9D9D9",
+                                },
+                            },
+                        }}
+                    />
+                    <TextField
+                        placeholder="Kata Laluan"
+                        fullWidth
+                        type={formData.showPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={(e) =>
+                            updatedFormData({ password: e.target.value })
+                        }
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <IconButton
+                                        onClick={() => {
+                                            updatedFormData({
+                                                showPassword:
+                                                    !formData.showPassword,
+                                            });
+                                        }}
+                                    >
+                                        {formData.showPassword ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                ),
+                                style: { fontSize: "14px" },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "10px",
+                                padding: "5px",
+                                "& fieldset": {
+                                    borderColor: "#D9D9D9",
+                                },
+                            },
+                        }}
+                    />
+                    <TextField
+                        placeholder="Sahkan Kata Laluan"
+                        fullWidth
+                        type={formData.showConfirm ? "text" : "password"}
+                        value={formData.password_confirmation}
+                        onChange={(e) =>
+                            updatedFormData({
+                                password_confirmation: e.target.value,
+                            })
+                        }
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <IconButton
+                                        onClick={() => {
+                                            updatedFormData({
+                                                showConfirm:
+                                                    !formData.showConfirm,
+                                            });
+                                        }}
+                                    >
+                                        {formData.showConfirm ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                ),
+                                style: { fontSize: "14px" },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "10px",
+                                padding: "5px",
+                                "& fieldset": {
+                                    borderColor: "#D9D9D9",
+                                },
+                            },
+                        }}
+                    />
+                    <Button sx={[styles.login_button, { marginTop: "10px" }]}>
+                        <Typography
+                            sx={{
+                                fontSize: 14,
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        >
+                            DAFTAR
+                        </Typography>
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                right: 20,
+                                backgroundColor: "#006330",
+                                borderRadius: "30px",
+                                height: "30px",
+                                width: "30px",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                display: "flex",
+                            }}
+                        >
+                            <ArrowForward sx={{ color: "white" }} />
+                        </Box>
+                    </Button>
+                    <Typography
+                        sx={{
+                            textAlign: "center",
+                            color: "black",
+                            fontSize: "14px",
+                        }}
+                    >
+                        Sudah mempunyai akaun?{" "}
+                        <Link
+                            sx={{
+                                textDecorationColor: "#007C3D",
+                                color: "#007C3D",
+                                fontSize: "14px",
+                                fontWeight: 700,
+                            }}
+                            href={route("login")}
+                        >
+                            Log masuk
+                        </Link>{" "}
+                        sekarang
+                    </Typography>
+                </Box>
+            </Box>
+        </Box>
     );
-}
+};
+
+export default Register;
