@@ -8,6 +8,7 @@ import {
     TextField,
     InputAdornment,
     iconButtonClasses,
+    Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
@@ -21,6 +22,7 @@ import {
     Notifications,
     Payment,
     PendingActions,
+    ReceiptLong,
     Search,
     SupportAgent,
 } from "@mui/icons-material";
@@ -34,41 +36,68 @@ export default function AuthenticatedLayout({ header, children }) {
             name: "Papan Pengguna",
             icon: <Home sx={{ fontSize: "30px" }} />,
             haveList: false,
+            path: "dashboard",
         },
         {
             id: 2,
             name: "Bayaran",
             icon: <Payment sx={{ fontSize: "30px" }} />,
             haveList: true,
+            path: "dashboard",
         },
         {
             id: 3,
             name: "Kalkulator Zakat",
             icon: <Calculate sx={{ fontSize: "30px" }} />,
             haveList: true,
+            path: "dashboard",
         },
         {
             id: 4,
             name: "Bantuan",
             icon: <PendingActions sx={{ fontSize: "30px" }} />,
             haveList: true,
+            path: "dashboard",
         },
         {
             id: 5,
             name: "Info",
             icon: <Notifications sx={{ fontSize: "30px" }} />,
             haveList: true,
+            path: "dashboard",
         },
         {
             id: 6,
             name: "Hubungi Kami",
             icon: <SupportAgent sx={{ fontSize: "30px" }} />,
             haveList: false,
+            path: "dashboard",
+        },
+    ]);
+    const [bayaranNav, setBayaranNav] = useState([
+        {
+            id: 1,
+            name: "Pembayaran",
+            icon: <Payment sx={{ fontSize: "25px" }} />,
+            path: "dashboard",
+        },
+        {
+            id: 2,
+            name: "Rekod Pembayaran",
+            icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
+            path: "dashboard",
         },
     ]);
 
     return (
-        <Box sx={{ minHeight: "100vh", backgroundColor: "#f3f4f6" }}>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+                backgroundColor: "#f3f4f6",
+            }}
+        >
             <AppBar position="static" color="default" elevation={1}>
                 <Box
                     sx={{
@@ -188,7 +217,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                     <Box
                         sx={{
-                            display: { md: "flex", sm: "grid", xs: "none" },
+                            display: { md: "flex", xs: "none" },
                             gap: "20px",
                         }}
                     >
@@ -202,7 +231,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     gap: "10px",
                                     fontSize: "16px",
                                 }}
-                                href={route("dashboard")}
+                                href={route(item.path)}
                             >
                                 {item.icon}
                                 {item.name}
@@ -210,11 +239,24 @@ export default function AuthenticatedLayout({ header, children }) {
                             </Button>
                         ))}
                     </Box>
+                    <Box
+                        sx={{
+                            display: { md: "none", xs: "flex" },
+                            flex: 1,
+                            alignItems: "center",
+                            gap: "10px",
+                            color: "white",
+                        }}
+                    >
+                        {nav.find((item) => item.name === header)?.icon}
+                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
+                            {header}
+                        </Typography>
+                    </Box>
 
                     <IconButton
                         edge="end"
-                        color="inherit"
-                        sx={{ display: { sm: "none" } }}
+                        sx={{ display: { md: "none" }, color: "white" }}
                         onClick={() => setShowNav((prev) => !prev)}
                     >
                         <MenuIcon />
@@ -225,27 +267,77 @@ export default function AuthenticatedLayout({ header, children }) {
             {showNav && (
                 <Box
                     sx={{
-                        display: { sm: "none" },
+                        display: { sm: "none", xs: "grid" },
                         backgroundColor: "#fff",
-                        p: 2,
                     }}
                 >
-                    <Button fullWidth href={route("dashboard")}>
-                        Dashboard
-                    </Button>
+                    {nav
+                        .filter((item) => item.name !== header) // ✅ filter out the one matching header
+                        .map((item) => (
+                            <React.Fragment key={item.id}>
+                                <Button
+                                    sx={{
+                                        color: "#007C3D",
+                                        textTransform: "none",
+                                        fontWeight: 700,
+                                        gap: "10px",
+                                        fontSize: "16px",
+                                        borderRadius: 0,
+                                    }}
+                                    href={route(item.path)}
+                                >
+                                    {item.icon}
+                                    {item.name}
+                                    {item.haveList && <KeyboardArrowDown />}
+                                </Button>
+                                <Divider />
+                            </React.Fragment>
+                        ))}
                     <Button fullWidth href={route("logout")} color="error">
                         Log Out
                     </Button>
                 </Box>
             )}
 
-            {header && (
+            {/* {header && (
                 <Box sx={{ backgroundColor: "#fff", boxShadow: 1, p: 3 }}>
                     {header}
                 </Box>
-            )}
+            )} */}
 
-            <Box component="main">{children}</Box>
+            <Box sx={{ display: { md: "flex", xs: "block" }, flex: 1 }}>
+                <Box
+                    sx={{
+                        display: { md: "block", xs: "none" },
+                        backgroundColor: "white",
+                        width: "250px",
+                    }}
+                >
+                    {bayaranNav.map((item) => (
+                        <Box key={item.id}>
+                            <Button
+                                fullWidth
+                                sx={{
+                                    borderRadius: 0,
+                                    gap: "10px",
+                                    padding: "15px 20px",
+                                    justifyContent: "start",
+                                    backgroundColor: "#006330",
+                                    color: "white",
+                                    textTransform: "none",
+                                    fontWeight: 700,
+                                    fontSize: "14px",
+                                }}
+                            >
+                                {item.icon}
+                                {item.name}
+                            </Button>
+                            <Divider sx={{ borderColor: "#D9D9D9" }} />
+                        </Box>
+                    ))}
+                </Box>
+                <Box component="main">{children}</Box>
+            </Box>
         </Box>
     );
 }
