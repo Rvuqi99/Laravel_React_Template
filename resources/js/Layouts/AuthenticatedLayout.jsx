@@ -124,6 +124,39 @@ const AuthenticatedLayout = ({ header, children }) => {
             role="presentation"
             onClick={toggleDrawer(false)}
         >
+            <Box
+                sx={{
+                    padding: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    justifyContent: "space-between",
+                }}
+            >
+                <Box
+                    component="img"
+                    src={logo1}
+                    sx={{
+                        height: { md: "70px", xs: "50px" },
+                    }}
+                />
+                <Button
+                    sx={{
+                        display: { md: "none" },
+                        color: "white",
+                        backgroundColor: "#176117",
+                        marginRight: "5px",
+                        borderRadius: "30px",
+                        minWidth: "40px",
+                        width: "40px",
+                        height: "40px",
+                    }}
+                    onClick={toggleDrawer(false)}
+                >
+                    <MenuIcon sx={{ fontSize: "30px" }} />
+                </Button>
+            </Box>
+            <Divider />
             <List>
                 {nav.map((item, index) => (
                     <ListItem key={index} disablePadding>
