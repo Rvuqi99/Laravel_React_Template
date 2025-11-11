@@ -8,6 +8,8 @@ import {
     TextField,
     InputAdornment,
     Divider,
+    Menu,
+    MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
@@ -15,14 +17,18 @@ import { usePage } from "@inertiajs/react";
 import logo1 from "@/Images/logo1.png";
 import { styles } from "@/Components/Styles";
 import {
+    AccountCircle,
     Calculate,
     Home,
     KeyboardArrowDown,
+    Logout,
     Notifications,
     Payment,
     PendingActions,
+    Person,
     ReceiptLong,
     Search,
+    Settings,
     SupportAgent,
 } from "@mui/icons-material";
 import Footer from "./Footer";
@@ -30,6 +36,8 @@ import Footer from "./Footer";
 const AuthenticatedLayout = ({ header, children }) => {
     const user = usePage().props.auth.user;
     const [showNav, setShowNav] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
     const [nav, setNav] = useState([
         {
             id: 1,
@@ -88,6 +96,13 @@ const AuthenticatedLayout = ({ header, children }) => {
             path: "dashboard",
         },
     ]);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Box sx={styles.authenticated_container}>
@@ -158,13 +173,104 @@ const AuthenticatedLayout = ({ header, children }) => {
                                 },
                             }}
                         />
-                        <Button sx={styles.authenticated_login_button}>
+                        {/* <Button sx={styles.authenticated_login_button}>
                             <Typography
                                 sx={{ fontSize: "16px", fontWeight: "bold" }}
                             >
                                 Log masuk
                             </Typography>
+                        </Button> */}
+                        <Button
+                            sx={{
+                                backgroundColor: "white",
+                                gap: "10px",
+                                textTransform: "none",
+                            }}
+                            onClick={handleClick}
+                            aria-controls={open ? "basic-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                        >
+                            <AccountCircle
+                                sx={{ color: "#176117", fontSize: "50px" }}
+                            />
+                            <Box
+                                sx={{
+                                    display: { md: "flex", xs: "none" },
+                                    gap: "10px",
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        fontSize: "16px",
+                                        fontWeight: 500,
+                                        color: "black",
+                                    }}
+                                >
+                                    Ali Bin Abu
+                                </Typography>
+                                <KeyboardArrowDown sx={{ color: "black" }} />
+                            </Box>
                         </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            slotProps={{
+                                list: {
+                                    "aria-labelledby": "basic-button",
+                                },
+                            }}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
+                            }}
+                        >
+                            <MenuItem
+                                onClick={handleClose}
+                                sx={{ gap: "10px" }}
+                            >
+                                <Person
+                                    sx={{ color: "#007C3D", fontSize: "25px" }}
+                                />
+                                <Typography
+                                    sx={{ color: "black", fontSize: "14px" }}
+                                >
+                                    Profil
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem
+                                onClick={handleClose}
+                                sx={{ gap: "10px" }}
+                            >
+                                <Settings
+                                    sx={{ color: "#4A4A4A", fontSize: "25px" }}
+                                />
+                                <Typography
+                                    sx={{ color: "black", fontSize: "14px" }}
+                                >
+                                    Tukar Kata Laluan
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem
+                                onClick={handleClose}
+                                sx={{ gap: "10px" }}
+                            >
+                                <Logout
+                                    sx={{ color: "#C04040", fontSize: "25px" }}
+                                />
+                                <Typography
+                                    sx={{ color: "black", fontSize: "14px" }}
+                                >
+                                    Log Keluar
+                                </Typography>
+                            </MenuItem>
+                        </Menu>
                     </Box>
                 </Box>
                 <Toolbar sx={styles.authenticated_appbar_bottom}>
