@@ -10,6 +10,12 @@ import {
     Divider,
     Menu,
     MenuItem,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Drawer,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
@@ -20,8 +26,11 @@ import {
     AccountCircle,
     Calculate,
     Home,
+    Inbox,
     KeyboardArrowDown,
+    KeyboardArrowUp,
     Logout,
+    Mail,
     Notifications,
     Payment,
     PendingActions,
@@ -37,7 +46,8 @@ const AuthenticatedLayout = ({ header, children }) => {
     const user = usePage().props.auth.user;
     const [showNav, setShowNav] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
+    const openNav = Boolean(anchorEl);
+    const [openDrawer, setOpenDrawer] = useState(false);
     const [nav, setNav] = useState([
         {
             id: 1,
@@ -97,12 +107,38 @@ const AuthenticatedLayout = ({ header, children }) => {
         },
     ]);
 
+    const toggleDrawer = (newOpen) => () => {
+        setOpenDrawer(newOpen);
+    };
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const DrawerList = (
+        <Box
+            sx={{ width: 250 }}
+            role="presentation"
+            onClick={toggleDrawer(false)}
+        >
+            <List>
+                {nav.map((item, index) => (
+                    <ListItem key={index} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon sx={{ color: "#007C3D" }}>
+                                {item.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={item.name} />
+                            {item.haveList && <KeyboardArrowDown />}
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
 
     return (
         <Box sx={styles.authenticated_container}>
@@ -127,6 +163,21 @@ const AuthenticatedLayout = ({ header, children }) => {
                         </Typography>
                     </Box>
                     <Box sx={styles.authenticated_appbar_top_right}>
+                        <Button
+                            sx={{
+                                display: { md: "none" },
+                                color: "white",
+                                backgroundColor: "#176117",
+                                marginRight: "5px",
+                                borderRadius: "30px",
+                                minWidth: "40px",
+                                width: "40px",
+                                height: "40px",
+                            }}
+                            onClick={toggleDrawer(true)}
+                        >
+                            <MenuIcon sx={{ fontSize: "30px" }} />
+                        </Button>
                         <TextField
                             placeholder="Cari..."
                             fullWidth
@@ -185,11 +236,12 @@ const AuthenticatedLayout = ({ header, children }) => {
                                 backgroundColor: "white",
                                 gap: "10px",
                                 textTransform: "none",
+                                borderRadius: "20px",
                             }}
                             onClick={handleClick}
-                            aria-controls={open ? "basic-menu" : undefined}
+                            aria-controls={openNav ? "basic-menu" : undefined}
                             aria-haspopup="true"
-                            aria-expanded={open ? "true" : undefined}
+                            aria-expanded={openNav ? "true" : undefined}
                         >
                             <AccountCircle
                                 sx={{ color: "#176117", fontSize: "50px" }}
@@ -215,7 +267,7 @@ const AuthenticatedLayout = ({ header, children }) => {
                         <Menu
                             id="basic-menu"
                             anchorEl={anchorEl}
-                            open={open}
+                            open={openNav}
                             onClose={handleClose}
                             slotProps={{
                                 list: {
@@ -304,7 +356,11 @@ const AuthenticatedLayout = ({ header, children }) => {
                         sx={{ display: { md: "none" }, color: "white" }}
                         onClick={() => setShowNav((prev) => !prev)}
                     >
-                        <MenuIcon />
+                        {showNav ? (
+                            <KeyboardArrowUp sx={{ fontSize: "30px" }} />
+                        ) : (
+                            <KeyboardArrowDown sx={{ fontSize: "30px" }} />
+                        )}
                     </IconButton>
                 </Toolbar>
             </AppBar>
@@ -316,33 +372,20 @@ const AuthenticatedLayout = ({ header, children }) => {
                         backgroundColor: "#fff",
                     }}
                 >
-                    {nav
-                        .filter((item) => item.name !== header) // ✅ filter out the one matching header
-                        .map((item) => (
-                            <React.Fragment key={item.id}>
-                                <Button
-                                    sx={styles.small_navbar_link}
-                                    href={route(item.path)}
-                                >
-                                    {item.icon}
-                                    {item.name}
-                                    {item.haveList && <KeyboardArrowDown />}
-                                </Button>
-                                <Divider />
-                            </React.Fragment>
-                        ))}
-                    <Button fullWidth href={route("logout")} color="error">
-                        Log Out
-                    </Button>
+                    {bayaranNav.map((item) => (
+                        <React.Fragment key={item.id}>
+                            <Button
+                                sx={styles.small_navbar_link}
+                                href={route(item.path)}
+                            >
+                                {item.icon}
+                                {item.name}
+                            </Button>
+                            <Divider />
+                        </React.Fragment>
+                    ))}
                 </Box>
             )}
-
-            {/* {header && (
-                <Box sx={{ backgroundColor: "#fff", boxShadow: 1, p: 3 }}>
-                    {header}
-                </Box>
-            )} */}
-
             <Box sx={{ display: { md: "flex", xs: "block" }, flex: 1 }}>
                 <Box
                     sx={{
@@ -364,6 +407,13 @@ const AuthenticatedLayout = ({ header, children }) => {
                 <Box component="main">{children}</Box>
             </Box>
             <Footer />
+            <Drawer
+                open={openDrawer}
+                onClose={toggleDrawer(false)}
+                sx={{ display: { md: "none", xs: "block" } }}
+            >
+                {DrawerList}
+            </Drawer>
         </Box>
     );
 };
