@@ -26,34 +26,25 @@ const Footer = () => {
                         <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>
                             Menu
                         </Typography>
-                        <Box
-                            sx={{
-                                display: { md: "flex", xs: "grid" },
-                                gap: { md: "40px", xs: "10px" },
-                            }}
-                        >
-                            <Box sx={{ display: "grid", gap: "10px" }}>
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    Papan Pengguna
-                                </Typography>
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    Bayaran
-                                </Typography>
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    Kalkulator Zakat
-                                </Typography>
-                            </Box>
-                            <Box sx={{ display: "grid", gap: "10px" }}>
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    Bantuan
-                                </Typography>
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    Info
-                                </Typography>
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    Hubungi Kami
-                                </Typography>
-                            </Box>
+                        <Box sx={{ display: "grid", gap: "10px" }}>
+                            <Typography sx={{ fontSize: "14px" }}>
+                                Papan Pengguna
+                            </Typography>
+                            <Typography sx={{ fontSize: "14px" }}>
+                                Bayaran
+                            </Typography>
+                            <Typography sx={{ fontSize: "14px" }}>
+                                Kalkulator Zakat
+                            </Typography>
+                            <Typography sx={{ fontSize: "14px" }}>
+                                Bantuan
+                            </Typography>
+                            <Typography sx={{ fontSize: "14px" }}>
+                                Info
+                            </Typography>
+                            <Typography sx={{ fontSize: "14px" }}>
+                                Hubungi Kami
+                            </Typography>
                         </Box>
                     </Box>
                     <Box
